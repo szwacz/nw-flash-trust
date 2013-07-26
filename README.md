@@ -1,10 +1,10 @@
-Cross-platform solution for node-webkit to make your Flash content trusted, so it can run smoothly.
+Cross-platform solution for [node-webkit](https://github.com/rogerwang/node-webkit) to make your Flash content trusted, so it can run smoothly.
 
-## Problem
+## Background
 
 Node-webkit uses "file:" protocol to render pages (what makes perfect sense because it runs locally). Unfortunately, for security reasons Flash doesn't like swfs embedded locally and applies very restrictive policy to them. Such swf lands in one of 2 possible [local sandboxes](http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7e3f.html), and communication via ExternalInterface is blocked.
 
-## Solution
+### Solution
 
 Fortunately there is officially supported way of making your local swf trusted, so previously mentioned restrictions don't apply. Full explanation can be found in [Adobe Flash Player Administration Guide](http://www.adobe.com/devnet/flashplayer/articles/flash_player_admin_guide.html).
 
@@ -74,7 +74,8 @@ trustManager.empty();
 var path = require('path');
 // as for node-webkit 0.6.3 __dirname is not supported so little more work is needed
 var appPath = path.dirname(process.execPath);
-// use path.join() for constructing system paths because it will insert '\' or '/' depending on platform
+// use path.join() for constructing system paths because it will
+// insert '\' or '/' depending on platform
 var playerPath = path.join(appPath, 'player.swf');
 trustManager.add(playerPath);
 ```
