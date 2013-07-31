@@ -2,7 +2,7 @@ Cross-platform solution for [node-webkit](https://github.com/rogerwang/node-webk
 
 ## Background
 
-Node-webkit uses "file:" protocol to render pages (what makes perfect sense because it runs locally). Unfortunately, for security reasons Flash doesn't like swfs embedded locally and applies very restrictive policy to them. Such swf lands in one of 2 possible [local sandboxes](http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7e3f.html), and communication via ExternalInterface is blocked.
+Node-webkit uses "file:" protocol to render pages (what makes perfect sense because it runs locally). Unfortunately, for security reasons Flash doesn't like swfs embedded locally and applies very restrictive policy to them. Such swf lands in one of two possible [local sandboxes](http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7e3f.html), and communication via ExternalInterface is blocked.
 
 ### Solution
 
@@ -27,7 +27,7 @@ npm install git://github.com/szwacz/nw-flash-trust.git#master
 
 ## Usage & API
 
-For the simplicity API is fully synchronous. It does a little of I/O, but so little I don't think it will freeze anything. If you have different opinion please share :).
+For the simplicity API is fully synchronous. It does a little of I/O, but so little I don't think it will freeze anything. If you have different opinion please share it.
 
 ```javascript
 var path = require('path');
@@ -72,11 +72,14 @@ trustManager.empty();
 
 ```javascript
 var path = require('path');
+
 // as for node-webkit 0.6.3 __dirname is not supported so little more work is needed
 var appPath = path.dirname(process.execPath);
+
 // use path.join() for constructing system paths because it will
 // insert '\' or '/' depending on platform
 var playerPath = path.join(appPath, 'player.swf');
+
 trustManager.add(playerPath);
 ```
 
