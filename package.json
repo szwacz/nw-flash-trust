@@ -1,7 +1,7 @@
 {
   "name": "nw-flash-trust",
   "author": "Jakub Szwacz <jakub@szwacz.com>",
-  "description": "Flash Player trusted locations manager for node-webkit.",
-  "version": "0.1.0",
-  "main": "./main.js"
+  "description": "Flash Player trusted locations manager for node-webkit",
+  "version": "0.1.1",
+  "main": "main.js"
 }
