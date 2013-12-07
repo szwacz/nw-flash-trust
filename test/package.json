@@ -1,0 +1,8 @@
+{
+  "name": "nw-flash-test",
+  "main": "index.html",
+  "version": "1.0.0",
+  "webkit": {
+    "plugin": true
+  }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+	
+	<script>
+		
+		try {
+			
+			var assert = require('assert');
+			var path = require('path');
+			
+			var flashTrust = require('..');
+			var trustManager = flashTrust.initSync('nw-flash-test');
+			
+			var appPath = path.dirname(process.execPath);
+			var trustedPath = path.join(appPath, 'trusted.swf');
+			var notTrustedPath = path.join(appPath, 'not-trusted.swf');
+			
+			trustManager.empty();
+			
+			assert.equal(trustManager.isTrusted(trustedPath), false);
+			assert.equal(trustManager.list().length, 0);
+			
+			trustManager.add(trustedPath);
+			
+			assert.equal(trustManager.list().length, 1);
+			assert.equal(trustManager.isTrusted(trustedPath), true);
+			assert.equal(trustManager.isTrusted(notTrustedPath), false);
+			
+			console.log('All tests pass.');
+			
+		} catch (err) {
+			console.log(err);
+			console.log(err.stack);
+		}
+		
+	</script>
+	
+	<p>Sandbox should be: LocalWithFile</p>
+    <object width="300" height="50">
+		<param name="movie" value="not-trusted.swf"></param>
+	</object>
+	
+	<p>Sandbox should be: LocalTrusted</p>
+    <object width="300" height="50">
+		<param name="movie" value="trusted.swf"></param>
+	</object>
+	
+</body>
+</html>
