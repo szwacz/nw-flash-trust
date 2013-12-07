@@ -4,31 +4,28 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 
-function getUserHome() {
-    if (process.platform === 'win32') {
-        return process.env.USERPROFILE;
-    }
-    return process.env.HOME;
-}
-
 function getFlashPlayerFolder() {
-    switch (os.platform()) {
+    switch (process.platform) {
     case 'win32':
         var version = os.release().split('.');
         if (version[0] === '5') {
             // xp
-            return getUserHome() + '\\Application Data\\Macromedia\\Flash Player';
+            return process.env.USERPROFILE + '\\Application Data\\Macromedia\\Flash Player';
         } else {
             // vista, 7, 8
-            return getUserHome() + '\\AppData\\Roaming\\Macromedia\\Flash Player';
+            return process.env.USERPROFILE + '\\AppData\\Roaming\\Macromedia\\Flash Player';
         }
     case 'darwin':
-        // os x
-        return getUserHome() + '/Library/Preferences/Macromedia/Flash Player';
+        // osx
+        return process.env.HOME + '/Library/Preferences/Macromedia/Flash Player';
     case 'linux':
-        return getUserHome() + '/.macromedia/Flash_Player';
+        return process.env.HOME + '/.macromedia/Flash_Player';
     }
     return null;
+}
+
+function getFlashPlayerConfigFolder() {
+    return path.join(getFlashPlayerFolder(), '#Security', 'FlashPlayerTrust');
 }
 
 module.exports.initSync = function (appName) {
@@ -76,31 +73,35 @@ module.exports.initSync = function (appName) {
         throw new Error('Provide valid appName.');
     }
     
-    // Determine flash player config folder path
-    
-    cfgPath = getFlashPlayerFolder();
-    if (!fs.existsSync(cfgPath)) {
-        // if this folder is not present then there is nothing I can do
-        throw new Error('Flash Player config folder not found.');
+    if (!fs.existsSync(getFlashPlayerConfigFolder())) {
+        
+        // Find out if Flash Config Folder exists
+        
+        cfgPath = getFlashPlayerFolder();
+        if (!fs.existsSync(cfgPath)) {
+            // if this folder is not present then there is nothing I can do
+            throw new Error('Flash Player config folder not found.');
+        }
+        
+        // Adding next parts to path one after another and checking if they exist
+        
+        cfgPath = path.join(cfgPath, '#Security');
+        if (!fs.existsSync(cfgPath)) {
+            fs.mkdirSync(cfgPath);
+        }
+        
+        cfgPath = path.join(cfgPath, 'FlashPlayerTrust');
+        if (!fs.existsSync(cfgPath)) {
+            fs.mkdirSync(cfgPath);
+        }
     }
     
-    // Adding next parts to path one after another and checking if they exist
-    
-    cfgPath = path.resolve(cfgPath, '#Security');
-    if (!fs.existsSync(cfgPath)) {
-        fs.mkdirSync(cfgPath);
-    }
-    
-    cfgPath = path.resolve(cfgPath, 'FlashPlayerTrust');
-    if (!fs.existsSync(cfgPath)) {
-        fs.mkdirSync(cfgPath);
-    }
-    
-    cfgPath = path.resolve(cfgPath, appName + '.cfg');
+    cfgPath = path.join(getFlashPlayerConfigFolder(), appName + '.cfg');
     if (fs.existsSync(cfgPath)) {
         // load and parse file if exists
         var data = fs.readFileSync(cfgPath, { encoding: 'utf8' });
         trusted = data.split(os.EOL);
+        // on the end of file could be empty line which means nothing
         var emptyStringIndex = trusted.indexOf('');
         if (emptyStringIndex !== -1) {
             trusted.splice(emptyStringIndex, 1);
