@@ -71,7 +71,7 @@ trustManager.empty();
 
 ### Pitfalls
 
-On Windows 2 Flash plugins can coexist: ActiveX plugin for Internet Explorer and second one, for all other browsers (Chrome, Firefox, Opera). If only ActiveX plugin is installed there is flash-config-folder on this maschine, so this library will instantiate withou throwing any error. But node-webkit uses the second plugin so in this case there is no Flash for him. Dont rely for Flash detection on what *nw-flash-trust* tells you.
+On Windows 2 Flash plugins can coexist: ActiveX plugin for Internet Explorer and second one, for all other browsers (Chrome, Firefox, Opera). If only ActiveX plugin is installed there is flash-config-folder on this maschine, so *nw-flash-trust* will instantiate without throwing any error. But node-webkit uses the second plugin so in this case there is no Flash for him. Dont rely for Flash detection on what *nw-flash-trust* tells you.
 
 To be sure Flash is available in node-webkit use something like this:
 ```javascript
