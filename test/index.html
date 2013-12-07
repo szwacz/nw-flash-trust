@@ -30,6 +30,11 @@
 			assert.equal(trustManager.isTrusted(trustedPath), true);
 			assert.equal(trustManager.isTrusted(notTrustedPath), false);
 			
+			trustManager.remove(trustedPath);
+			
+			assert.equal(trustManager.isTrusted(trustedPath), false);
+			assert.equal(trustManager.list().length, 0);
+			
 			console.log('All tests pass.');
 			
 		} catch (err) {
