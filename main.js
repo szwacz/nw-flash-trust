@@ -28,8 +28,6 @@ function getFlashPlayerConfigFolder() {
     return path.join(getFlashPlayerFolder(), '#Security', 'FlashPlayerTrust');
 }
 
-module.exports.getFlashPlayerFolder = getFlashPlayerFolder;
-
 module.exports.initSync = function (appName) {
     
     var trusted = [];
