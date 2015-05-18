@@ -3,6 +3,7 @@
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 function getFlashPlayerFolder() {
     switch (process.platform) {
@@ -79,8 +80,12 @@ module.exports.initSync = function (appName) {
         
         cfgPath = getFlashPlayerFolder();
         if (!fs.existsSync(cfgPath)) {
-            // if this folder is not present then there is nothing I can do
-            throw new Error('Flash Player config folder not found.');
+            // if this folder is not present then try to create it
+            try {
+                mkdirp.sync(cfgPath);
+            } catch(err) {
+                throw new Error('Could not create Flash Player config folder.');
+            }
         }
         
         // Adding next parts to path one after another and checking if they exist
