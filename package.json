@@ -1,8 +1,8 @@
 {
   "name": "nw-flash-trust",
   "author": "Jakub Szwacz <jakub@szwacz.com>",
-  "description": "Flash Player trusted locations manager for NW.js",
-  "version": "0.2.0",
+  "description": "Flash Player trusted locations manager for NW.js and Atom Electron",
+  "version": "0.3.0",
   "main": "main.js",
   "homepage": "https://github.com/szwacz/nw-flash-trust",
   "repository": {

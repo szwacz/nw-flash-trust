@@ -25,14 +25,17 @@ function getFlashPlayerFolder() {
     return null;
 }
 
-function getFlashPlayerConfigFolder() {
+function getFlashPlayerConfigFolder(customFolder) {
+    if (customFolder) {
+        return path.join(customFolder, '#Security', 'FlashPlayerTrust');
+    }
     return path.join(getFlashPlayerFolder(), '#Security', 'FlashPlayerTrust');
 }
 
-module.exports.initSync = function (appName) {
+module.exports.initSync = function (appName, customFolder) {
     
     var trusted = [];
-    var cfgPath;
+    var cfgPath, cfgFolder;
     
     function save() {
         var data = trusted.join(os.EOL);
@@ -74,34 +77,19 @@ module.exports.initSync = function (appName) {
         throw new Error('Provide valid appName.');
     }
     
-    if (!fs.existsSync(getFlashPlayerConfigFolder())) {
-        
-        // Find out if Flash Config Folder exists
-        
-        cfgPath = getFlashPlayerFolder();
-        if (!fs.existsSync(cfgPath)) {
-            // if this folder is not present then try to create it
-            try {
-                mkdirp.sync(cfgPath);
-            } catch(err) {
-                throw new Error('Could not create Flash Player config folder.');
-            }
-        }
-        
-        // Adding next parts to path one after another and checking if they exist
-        
-        cfgPath = path.join(cfgPath, '#Security');
-        if (!fs.existsSync(cfgPath)) {
-            fs.mkdirSync(cfgPath);
-        }
-        
-        cfgPath = path.join(cfgPath, 'FlashPlayerTrust');
-        if (!fs.existsSync(cfgPath)) {
-            fs.mkdirSync(cfgPath);
+    cfgFolder = getFlashPlayerConfigFolder(customFolder);
+
+    // Find out if Flash Config Folder exists
+    if (!fs.existsSync(cfgFolder)) {
+        // if this folder is not present then try to create it
+        try {
+            mkdirp.sync(cfgFolder);
+        } catch(err) {
+            throw new Error('Could not create Flash Player config folder.');
         }
     }
     
-    cfgPath = path.join(getFlashPlayerConfigFolder(), appName + '.cfg');
+    cfgPath = path.join(cfgFolder, appName + '.cfg');
     if (fs.existsSync(cfgPath)) {
         // load and parse file if exists
         var data = fs.readFileSync(cfgPath, { encoding: 'utf8' });
