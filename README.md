@@ -33,6 +33,11 @@ var appName = 'myApp';
 // Initialization and parsing config file for given appName (if already exists).
 var trustManager = flashTrust.initSync(appName);
 
+// Alternatively you can provide a custom flash config folder for initialization.
+// This is useful for example if you use Atom Electron and a PPAPI flash plugin (like Pepper Flash),
+// as the flash config folder in this case would be in the Atom Electron data path folder.
+var trustManager = flashTrust.initSync(appName, '/yourApp-data-path/Pepper Data/Shockwave Flash/WritableRoot');
+
 // adds given filepath to trusted locations
 // paths must be absolute
 trustManager.add(path.resolve('path-to', 'file.swf'));
